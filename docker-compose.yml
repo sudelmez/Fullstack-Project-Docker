@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  react-app:
+    build:
+      context: ./auth-ui
+      dockerfile: Dockerfile
+    depends_on:
+      - dotnet
+    ports:
+      - "3000:3000"
+    networks:
+      - my_network
+    environment:
+      - PORT=3000
+      - PROXY_API=http://dotnet:5273
+
+  dotnet:
+    build:
+      context: ./TodoApi2
+      dockerfile: Dockerfile
+    ports:
+      - "5273:5273"
+    networks:
+      - my_network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+    depends_on:
+      - mongo
+    restart: on-failure
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - my_network
+    restart: on-failure
+
+networks:
+  my_network:
+    driver: bridge
