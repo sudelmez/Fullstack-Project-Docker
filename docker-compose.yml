@@ -13,11 +13,11 @@ services:
       - my_network
     environment:
       - PORT=3000
-      - PROXY_API=http://dotnet:5273
+      - PROXY_API=http://localhost:5273
 
   dotnet:
     build:
-      context: ./TodoApi2
+      context: ./dotnet-backend
       dockerfile: Dockerfile
     ports:
       - "5273:5273"
@@ -25,7 +25,7 @@ services:
       - my_network
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27018
     depends_on:
       - mongo
     restart: on-failure
@@ -33,10 +33,18 @@ services:
   mongo:
     image: mongo:latest
     ports:
-      - "27017:27017"
+      - "27018:27017"
     networks:
       - my_network
     restart: on-failure
+    volumes:
+      -  ./portal:/backup
+      - ./database:/data/db 
+    command: mongorestore /backup --host mongo:27017
+
+volumes:
+  dbdata:
+
 
 networks:
   my_network:
