@@ -38,7 +38,8 @@ services:
       - my_network
     restart: on-failure
     volumes:
-      - ./portal:/data/db
+      - ./dump:/data/db
+    command: mongorestore --drop --dir=/data/db/portal
 
 volumes:
   dbdata:
