@@ -38,13 +38,10 @@ services:
       - my_network
     restart: on-failure
     volumes:
-      -  ./portal:/backup
-      - ./database:/data/db 
-    command: mongorestore /backup --host mongo:27017
+      - ./portal:/data/db
 
 volumes:
   dbdata:
-
 
 networks:
   my_network:

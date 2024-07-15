@@ -1,3 +1,0 @@
-db.getCollectionNames() 
-ls
-db.getCollectionInfos()
